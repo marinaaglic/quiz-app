@@ -1,22 +1,36 @@
 import { useState, useCallback } from "react";
 import QUESTIONS from "../questions.ts";
 import QuestionTimer from "./QuestionTimer.tsx";
+import QuizComplete from "../assets/quiz-complete.png";
 
 export default function Quiz() {
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
 
   const activeQuestionIndex = userAnswers.length;
+  const quizIsComplete = activeQuestionIndex === QUESTIONS.length;
 
-  function selectAnswerHandler(selectedAnswer: string | null) {
+  const selectAnswerHandler = useCallback(function selectAnswerHandler(
+    selectedAnswer: string | null
+  ) {
     setUserAnswers((prevUserAnswers) => {
       return [...prevUserAnswers, selectedAnswer || ""];
     });
-  }
+  },
+  []);
 
   const skipAnswerHandler = useCallback(
     () => selectAnswerHandler(null),
     [selectAnswerHandler]
   );
+
+  if (quizIsComplete) {
+    return (
+      <div id="summary">
+        <img src={QuizComplete} alt="Trophy icon" />
+        <h2>Quiz Completed!</h2>
+      </div>
+    );
+  }
 
   return (
     <div id="quiz">
