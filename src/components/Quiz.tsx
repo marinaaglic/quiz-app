@@ -1,9 +1,9 @@
 import { useState, useCallback } from "react";
 import QUESTIONS from "../questions.ts";
-import QuestionTimer from "./QuestionTimer.tsx";
-import QuizComplete from "../assets/quiz-complete.png";
+import Question from "./Question.tsx";
+import Summary from "./Summary.tsx";
 
-export default function Quiz() {
+function Quiz() {
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
 
   const activeQuestionIndex = userAnswers.length;
@@ -23,34 +23,20 @@ export default function Quiz() {
     [selectAnswerHandler]
   );
 
-  if (quizIsComplete) {
-    return (
-      <div id="summary">
-        <img src={QuizComplete} alt="Trophy icon" />
-        <h2>Quiz Completed!</h2>
-      </div>
-    );
-  }
-
   return (
     <div id="quiz">
-      <div id="question">
-        <QuestionTimer
+      {quizIsComplete ? (
+        <Summary userAnswers={userAnswers} />
+      ) : (
+        <Question
           key={activeQuestionIndex}
-          timeout={10000}
-          onTimeout={skipAnswerHandler}
+          index={activeQuestionIndex}
+          onSelectedAnswer={selectAnswerHandler}
+          onSkipAnswer={skipAnswerHandler}
         />
-        <h2>{QUESTIONS[activeQuestionIndex].text}</h2>
-        <ul id="answers">
-          {QUESTIONS[activeQuestionIndex].answers.map((answer) => (
-            <li key={answer} className="answer">
-              <button onClick={() => selectAnswerHandler(answer)}>
-                {answer}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
+      )}
     </div>
   );
 }
+
+export default Quiz;

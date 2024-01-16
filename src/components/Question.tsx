@@ -15,7 +15,7 @@ export default function Question({
     isCorrect: null as boolean | null,
   });
 
-  function handleSelectAnswer(answer: string) {
+  function selectedAnswerHandler(answer: string) {
     setAnswer({
       selectedAnswer: answer,
       isCorrect: null,
@@ -49,7 +49,7 @@ export default function Question({
         answers={QUESTIONS[index].answers}
         selectedAnswer={answer.selectedAnswer}
         answerState={answerState}
-        onSelect={handleSelectAnswer}
+        onSelect={selectedAnswerHandler}
       />
     </div>
   );
